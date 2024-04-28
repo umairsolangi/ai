@@ -1,0 +1,43 @@
+import numpy as np
+class SLP(object):
+    
+    def __init__(self,input_size, learning_rate=1, epochs=1000):
+        self.Weights = np.zeros(input_size+1)
+        print("Creating weigh vector, one-dimensional array woth zeros", self.Weights)
+        self.epochs = epochs
+        self.learning_rate = learning_rate
+        
+    def activation_function(self, input_value):
+        return 1 if input_value >=0 else 0
+    
+    def predict(self, input_value):
+        
+        z = self.Weights.T.dot(input_value)
+        a = self.activation_function(z)
+        return a
+    
+    def perceptronLearning(self, given_input, desired_output):
+        for j in range(self.epochs):
+            for i in range(desired_output.shape[0]):
+                x = np.insert(given_input[i], 0,1)
+                y = self.predict(x)
+                e = desired_output[i] - y
+                print("Error:", e)
+                print("Predicted Output:",y)
+                self.Weights = self.Weights + self.learning_rate * e * x
+            
+    #or Gate
+given_input = np.array([
+    [0,0],
+    [0,1],
+    [1,0],
+    [1,1]
+])
+desired_output = np.array([0,1,1,1])
+print("Given Input \n", given_input)
+print("Desired Output", desired_output)
+slp = SLP(input_size=2)
+slp.perceptronLearning(given_input, desired_output)
+print("input Weights with bias", slp.Weights)
+print("Learning rate:", slp.learning_rate)
+print("Total Epochs:", slp.epochs)
